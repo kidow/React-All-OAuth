@@ -11,4 +11,7 @@ module.exports = () => {
       else console.log('mongodb connected.')
     }
   )
+
+  require('./User')
+  require('./Comment')
 }
