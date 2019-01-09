@@ -1,0 +1,20 @@
+.container {
+  height: 100vh;
+  width: 800px;
+  margin: 0 auto;
+  display: flex;
+  margin-top: 3rem;
+  .comment__container {
+    width: 800px;
+    .comment__input {
+      width: 90%;
+      height: 2rem;
+      padding-left: 1rem;
+      outline: none;
+    }
+  }
+  .login__container {
+    display: flex;
+    flex-direction: column;
+  }
+}
