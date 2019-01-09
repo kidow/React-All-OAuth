@@ -14,8 +14,10 @@ class App extends Component {
     logged: false
   }
 
-  onFacebook = res => {
+  onFacebook = async res => {
     console.log('facebook res: ', res)
+    const data = await axios.post('/facebook', { res: res })
+    if (data.logged) this.setState({ logged: this.state.logged })
   }
 
   onGoogle = res => {
@@ -46,10 +48,26 @@ class App extends Component {
     console.log('kakao err ', err)
   }
 
-  // async componentDidMount() {
-  //   const logged = await axios.get('/auth/check')
-  //   this.setState({logged})
-  // }
+  onCheck = async () => {
+    const logged = await axios.get('/check')
+    this.setState({ logged })
+  }
+
+  onLogout = async () => {
+    const logged = await axios.post('/logout')
+    this.setState({ logged })
+  }
+
+  onChange = () => {}
+
+  onSubmit = async () => {}
+
+  onKeyPress = () => {}
+
+  componentDidMount() {
+    this.onCheck()
+  }
+
   render() {
     const {
       onFacebook,
@@ -61,41 +79,45 @@ class App extends Component {
       onTwitterSuccess,
       onTwitterError
     } = this
+    const { logged, comments } = this.state
     return (
       <div className="container">
         <div className="comment__container">
           <input className="comment__input" placeholder="자유롭게 입력하세요" />
         </div>
-        <div className="login__container">
-          <FacebookLogin
-            appId="384687665637323"
-            callback={onFacebook}
-            autoLoad
-          />
-          <GoogleLogin
-            clientId="1058723835629-mqtnr9obs9jhr3lsgpnjddphn138ebgo.apps.googleusercontent.com"
-            onSuccess={onGoogle}
-            onFailure={onGoogle}
-          />
-          <GitHubLogin
-            clientId="073adc4f5a4135a85606"
-            onSuccess={onGithubSuccess}
-            onFailure={onGithubError}
-          />
-          <TwitterLogin
-            loginUrl="http://localhost:4000/api/v1/auth/twitter"
-            onFailure={onTwitterError}
-            onSuccess={onTwitterSuccess}
-            requestTokenUrl="http://dev.twitter.com/oauth/request_token"
-          />
-          <KakaoLogin
-            jsKey="5c86b603c29b8aa51a39743b480a7607"
-            onSuccess={onKakaoSuccess}
-            onFailure={onKakaoError}
-            useDefaultStyle
-          />
-          {/* 로그아웃 버튼 */}
-        </div>
+        {logged ? (
+          <div className="logout__container">logout</div>
+        ) : (
+          <div className="login__container">
+            <FacebookLogin
+              appId="384687665637323"
+              callback={onFacebook}
+              autoLoad
+            />
+            <GoogleLogin
+              clientId="1058723835629-mqtnr9obs9jhr3lsgpnjddphn138ebgo.apps.googleusercontent.com"
+              onSuccess={onGoogle}
+              onFailure={onGoogle}
+            />
+            <GitHubLogin
+              clientId="073adc4f5a4135a85606"
+              onSuccess={onGithubSuccess}
+              onFailure={onGithubError}
+            />
+            <TwitterLogin
+              loginUrl="http://localhost:4000/api/v1/auth/twitter"
+              onFailure={onTwitterError}
+              onSuccess={onTwitterSuccess}
+              requestTokenUrl="http://dev.twitter.com/oauth/request_token"
+            />
+            <KakaoLogin
+              jsKey="5c86b603c29b8aa51a39743b480a7607"
+              onSuccess={onKakaoSuccess}
+              onFailure={onKakaoError}
+              useDefaultStyle
+            />
+          </div>
+        )}
       </div>
     )
   }

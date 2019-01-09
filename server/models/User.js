@@ -4,6 +4,8 @@ const User = new mongoose.Schema({
   id: String,
   accessToken: String,
   comments: String,
+  provider: String,
+  name: String,
   createdAt: {
     type: Date,
     default: Date.now
